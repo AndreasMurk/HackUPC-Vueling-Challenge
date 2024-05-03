@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
-
+// import firebase from 'firebase/app';
 // This service worker can be customized!
 // See https://developers.google.com/web/tools/workbox/modules
 // for the list of available Workbox modules, or add any other
@@ -13,6 +13,7 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import firebaseConfig from "./firebase-config";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -76,5 +77,6 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
 });
+
 
 // Any other custom service worker logic can go here.
