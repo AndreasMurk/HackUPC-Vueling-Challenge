@@ -1,7 +1,6 @@
-from openai import OpenAI
-import json
-import responses
 import requests
+import os
+
 
 class Flight:
     def __init__(self, flight_number, departure=None, arrival=None, gate=None, delayed=0, timeDelayed=None):
@@ -11,9 +10,8 @@ class Flight:
         self.gate = gate
         self.delayed = delayed
         self.timeDelayed = timeDelayed
-        #self.openai = OpenAI()
         self.flight_api_url = "https://api.aviationstack.com/v1/flights"
-        self.flight_api_key = "df789a7d9a8d4df3ff0f1b7cce337134"
+        self.flight_api_key = os.env.get('FLIGHT_API_KEY')
         self.data = None
 
     def get_flight_info(self):
@@ -39,4 +37,3 @@ class Flight:
             return None
         else:
             self.gate = data['departure']['gate']
-    
