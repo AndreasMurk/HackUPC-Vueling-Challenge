@@ -34,10 +34,11 @@ def upload_file():
     transcribed_text = whisper.get_text_from_path(temp_file.name)
 
     assistant = Assistant(OpenAI())
-    assistant.receive_message(transcribed_text)
+    message = assistant.receive_message(transcribed_text)
+    print(message)
 
     textToSpeech = TextToSpeech(OpenAI())
-    audio_chunks = textToSpeech.get_speech_from_text(transcribed_text)
+    audio_chunks = textToSpeech.get_speech_from_text(message)
     return Response(audio_chunks, mimetype='audio/mpeg')
 
 
