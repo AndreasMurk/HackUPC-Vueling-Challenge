@@ -74,10 +74,16 @@ const AudioRecorder: FC = () => {
                     method: 'POST',
                     body: formData
                 });
-                const transcription = await response.text();
-                console.log('Transcription:', transcription);
-            } catch (error) {
-                console.error('Error transcribing audio:', error);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to upload audio: ${response.status} - ${response.statusText}`);
+                }
+
+                const text = await response.text();
+                console.log(text); // Log response from the backend
+
+            } catch (error: any) {
+                console.error('Error transcribing audio:', error.message);
             }
 
             setAudioChunks([]);
