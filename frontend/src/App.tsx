@@ -1,29 +1,39 @@
-import React, {useEffect} from 'react';
 import './App.css';
-import AudioRecorder from "./components/AudioRecorder";
+import {AudioRecorder} from "react-audio-voice-recorder";
 
 function App() {
-  const handleMicrophonePermission = async () => {
-    try {
-      // Request microphone permission
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      console.log('Microphone access granted');
-      // You can now use the stream object to access audio data
-    } catch (error) {
-      console.error('Microphone access denied', error);
-    }
-  };
+    const addAudioElement = (blob: Blob) => {
+        const url = URL.createObjectURL(blob);
+        const audio = document.createElement('audio');
+        audio.src = url;
+        audio.controls = true;
+        document.body.appendChild(audio);
+    };
 
-  useEffect(() => {
-    // Request microphone permission when component mounts
-    handleMicrophonePermission().then(r => console.log("Microphone permission requested"));
-  }, []);
-
-  return (
-    <div className="App">
-      <AudioRecorder />
-    </div>
-  );
+    return (
+        <div className="App">
+            <AudioRecorder
+                onRecordingComplete={addAudioElement}
+                audioTrackConstraints={{
+                    noiseSuppression: true,
+                    echoCancellation: true,
+                    // autoGainControl,
+                    // channelCount,
+                    // deviceId,
+                    // groupId,
+                    // sampleRate,
+                    // sampleSize,
+                }}
+                onNotAllowedOrFound={(err) => console.table(err)}
+                downloadOnSavePress={true}
+                downloadFileExtension="webm"
+                mediaRecorderOptions={{
+                    audioBitsPerSecond: 128000,
+                }}
+                // showVisualizer={true}
+            />
+        </div>
+    );
 }
 
 export default App;
