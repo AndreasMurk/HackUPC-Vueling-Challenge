@@ -12,4 +12,4 @@ class WhisperService:
             file=file
         )
 
-        return transcription
+        return transcription.text

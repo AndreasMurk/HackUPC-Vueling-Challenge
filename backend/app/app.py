@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_cors import CORS
 
 from openai import OpenAI
+import tempfile
 
 from adapters.WhisperService import WhisperService
 
@@ -20,9 +21,11 @@ def upload_file():
     if audio_file.filename == '':
         return 'No selected audio file', 400
 
-    whisper = WhisperService(OpenAI())
+    with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as temp_file:
+        temp_file.write(audio_file.read())
 
-    return whisper.get_text_from_file(audio_file.save())
+    whisper = WhisperService(OpenAI())
+    return whisper.get_text_from_path(temp_file.name)
 
 
 def write_file_info(file):
