@@ -49,6 +49,7 @@ const AudioRecorder: FC = () => {
                 chunks.push(event.data);
             }
         };
+        setReceivedAudioChunks([]);
         setAudioChunks(chunks);
 
         mediaRecorder.current.start();
@@ -102,7 +103,6 @@ const AudioRecorder: FC = () => {
                 });
 
                 const receivedBlob = new Blob([combinedChunks], {type: 'audio/webm'});
-
                 setReceivedAudioChunks([receivedBlob]);
             } catch (error: any) {
                 console.error('Error transcribing audio:', error.message);
@@ -133,7 +133,7 @@ const AudioRecorder: FC = () => {
                     ) : null}
                     {text && <p>{text}</p>}
                     {receivedAudioChunks.length > 0 && (
-                        <audio controls>
+                        <audio autoPlay={true}>
                             <source src={URL.createObjectURL(receivedAudioChunks[0])} type="audio/mpeg"/>
                             Your browser does not support the audio element.
                         </audio>
