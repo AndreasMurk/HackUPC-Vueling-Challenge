@@ -1,32 +1,24 @@
 from flask import Flask, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    if 'file' not in request.files:
-        return 'No file part'
+    if 'audio' not in request.files:
+        return 'No audio file part', 400
 
-    file = request.files['file']
+    audio_file = request.files['audio']
 
-    if file.filename == '':
-        return 'No selected file'
+    if audio_file.filename == '':
+        return 'No selected audio file', 400
 
-    # Retrieve basic information about the file
-    file_info = {
-        'filename': file.filename,
-        'content_type': file.content_type,
-        'content_length': file.content_length
-    }
+    # Save the uploaded audio file
+    # audio_file.save(audio_file.filename)
 
-    # Write basic information about the file to a text file
-    with open('file_info.txt', 'w') as f:
-        f.write(f"Filename: {file_info['filename']}\n")
-        f.write(f"Content Type: {file_info['content_type']}\n")
-        f.write(f"Content Length: {file_info['content_length']}\n")
-
-    return 'File information saved successfully'
+    return 'Audio file uploaded successfully'
 
 
 if __name__ == '__main__':
