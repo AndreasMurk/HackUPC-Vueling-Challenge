@@ -1,6 +1,8 @@
 "use client";
 import {FC, useRef, useState} from "react";
 
+const FLASK_BASE_URL = "http://localhost:5000";
+
 const AudioRecorder: FC = () => {
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef<MediaRecorder | null>(null); // Corrected type
@@ -59,16 +61,24 @@ const AudioRecorder: FC = () => {
         setRecordingStatus("inactive");
         if (!mediaRecorder.current) return;
         mediaRecorder.current.stop();
-        mediaRecorder.current.onstop = () => {
+        mediaRecorder.current.onstop = async () => {
             const audioBlob = new Blob(audioChunks, {type: mimeType});
-            const audioUrl = URL.createObjectURL(audioBlob);
-            setAudio(audioUrl);
 
-            // Automatically trigger download
-            const anchor = document.createElement('a');
-            anchor.href = audioUrl;
-            anchor.download = 'recording.webm';
-            anchor.click();
+            // Create a FormData object and append the audio file
+            const formData = new FormData();
+            formData.append('audio', audioBlob);
+
+            // Send the audio file to the backend
+            try {
+                const response = await fetch(`${FLASK_BASE_URL}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const transcription = await response.text();
+                console.log('Transcription:', transcription);
+            } catch (error) {
+                console.error('Error transcribing audio:', error);
+            }
 
             setAudioChunks([]);
         };
@@ -95,14 +105,6 @@ const AudioRecorder: FC = () => {
                         </button>
                     ) : null}
                 </div>
-                {audio ? (
-                    <div className="audio-container">
-                        <audio src={audio} controls></audio>
-                        <a download href={audio}>
-                            Download Recording
-                        </a>
-                    </div>
-                ) : null}
             </main>
         </div>
     );
