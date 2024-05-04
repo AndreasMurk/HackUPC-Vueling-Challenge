@@ -4,7 +4,7 @@ import {AudioRecorder} from "react-audio-voice-recorder";
 function App() {
     const addAudioElement = (blob: Blob) => {
         const url = URL.createObjectURL(blob);
-        const audio = document.createElement('audio');
+        const audio = document.createElement("audio");
         audio.src = url;
         audio.controls = true;
         document.body.appendChild(audio);
@@ -30,7 +30,7 @@ function App() {
                 mediaRecorderOptions={{
                     audioBitsPerSecond: 128000,
                 }}
-                // showVisualizer={true}
+                showVisualizer={true}
             />
         </div>
     );
