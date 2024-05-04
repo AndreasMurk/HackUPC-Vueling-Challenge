@@ -11,6 +11,7 @@ const AudioRecorder: FC = () => {
     const [stream, setStream] = useState<MediaStream | null>(null); // Corrected type
     const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
     const [audio, setAudio] = useState<string | null>(null); // You can adjust the type as needed
+    const [text, setText] = useState<string | null>(null); // You can adjust the type as needed
     const mimeType = "audio/webm";
 
     const getMicrophonePermission = async () => {
@@ -81,8 +82,7 @@ const AudioRecorder: FC = () => {
                 }
 
                 const text = await response.text();
-                console.log(text); // Log response from the backend
-
+                setText(text);
             } catch (error: any) {
                 console.error('Error transcribing audio:', error.message);
             }
@@ -111,6 +111,7 @@ const AudioRecorder: FC = () => {
                             Stop Recording
                         </button>
                     ) : null}
+                    {text && <p>{text}</p>}
                 </div>
             </main>
         </div>
