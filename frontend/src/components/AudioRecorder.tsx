@@ -57,15 +57,19 @@ const AudioRecorder: FC = () => {
 
     const stopRecording = () => {
         setRecordingStatus("inactive");
-        //stops the recording instance
         if (!mediaRecorder.current) return;
         mediaRecorder.current.stop();
         mediaRecorder.current.onstop = () => {
-            //creates a blob file from the audiochunks data
             const audioBlob = new Blob(audioChunks, {type: mimeType});
-            //creates a playable URL from the blob file.
             const audioUrl = URL.createObjectURL(audioBlob);
             setAudio(audioUrl);
+
+            // Automatically trigger download
+            const anchor = document.createElement('a');
+            anchor.href = audioUrl;
+            anchor.download = 'recording.webm';
+            anchor.click();
+
             setAudioChunks([]);
         };
     };
