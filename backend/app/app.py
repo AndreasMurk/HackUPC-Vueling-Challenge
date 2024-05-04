@@ -28,16 +28,5 @@ def upload_file():
     return whisper.get_text_from_path(temp_file.name)
 
 
-def write_file_info(file):
-    # Retrieve basic information about the file
-    file_info = {
-        'filename': file.filename,
-        'content_type': file.content_type,
-        'content_length': file.content_length
-    }
-
-    return file_info
-
-
 if __name__ == '__main__':
     app.run(debug=True)
