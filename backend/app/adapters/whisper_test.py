@@ -8,3 +8,8 @@ transcription = client.audio.transcriptions.create(
 )
 
 print(transcription.text)
+
+class WhisperService:
+    def __init__(self):
+
+    def get_text
