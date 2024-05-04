@@ -17,6 +17,11 @@ CORS(app, resource={
 })
 
 
+@app.route('/', methods=['GET'])
+def home():
+    return "Hello, World!"
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'audio' not in request.files:
@@ -35,7 +40,7 @@ def upload_file():
 
     assistant = Assistant(OpenAI())
     message = assistant.receive_message(transcribed_text)
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     textToSpeech = TextToSpeech(OpenAI())
     audio_chunks = textToSpeech.get_speech_from_text(message)
