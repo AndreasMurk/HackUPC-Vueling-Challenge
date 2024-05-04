@@ -35,7 +35,7 @@ def upload_file():
 
     assistant = Assistant(OpenAI())
     message = assistant.receive_message(transcribed_text)
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
 
     textToSpeech = TextToSpeech(OpenAI())
     audio_chunks = textToSpeech.get_speech_from_text(message)

@@ -28,6 +28,7 @@ class Assistant:
             model="gpt-4-turbo"
         )
         self.thread = self.client.beta.threads.create()
+        self.event_handler = EventHandler()
 
     def receive_message(self, message):
         message_obj = self.client.beta.threads.messages.create(
@@ -36,15 +37,14 @@ class Assistant:
             content=message
         )
 
-        event_handler = EventHandler()
         with self.client.beta.threads.runs.stream(
             thread_id=self.thread.id,
             assistant_id=self.assistant.id,
-            event_handler=event_handler
+            event_handler=self.event_handler
         ) as stream:
             stream.until_done()
 
-        return event_handler.get_last_response()
+        return self.event_handler.get_last_response()
 
 
 class EventHandler(AssistantEventHandler):
@@ -54,9 +54,13 @@ class EventHandler(AssistantEventHandler):
 
     @override
     def on_event(self, event):
-        if event.event == 'thread.run.message':
-            self.responses.append(event.data.get('content', ''))
+        print(f"Event received: {event}")  # Debug print to observe events
+        #import pdb; pdb.set_trace()
+        if event.event == 'thread.message.completed':
+            print(f"Message event: {event.data.content[0].text.value}")  # Debug print for message contents
+            self.responses.append(event.data.content[0].text.value)
         elif event.event == 'thread.run.requires_action':
+            print(f"Requires action: {event.data}")  # Debug print for actions needed
             run_id = event.data['id']
             self.handle_requires_action(event.data, run_id)
 
