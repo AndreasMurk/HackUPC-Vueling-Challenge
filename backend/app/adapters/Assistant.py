@@ -28,7 +28,7 @@ class Assistant:
             model="gpt-4-turbo"
         )
         self.thread = self.client.beta.threads.create()
-        self.event_handler = EventHandler()
+        self.event_handler = EventHandler(self.client, self.thread)
 
     def receive_message(self, message):
         message_obj = self.client.beta.threads.messages.create(
@@ -48,28 +48,28 @@ class Assistant:
 
 
 class EventHandler(AssistantEventHandler):
-    def __init__(self):
+    def __init__(self, client, thread):
         super().__init__()
         self.responses = []
+        self.client = client
+        self.thread = thread
 
     @override
     def on_event(self, event):
         print(f"Event received: {event}")  # Debug print to observe events
-        #import pdb; pdb.set_trace()
         if event.event == 'thread.message.completed':
             print(f"Message event: {event.data.content[0].text.value}")  # Debug print for message contents
             self.responses.append(event.data.content[0].text.value)
         elif event.event == 'thread.run.requires_action':
             print(f"Requires action: {event.data}")  # Debug print for actions needed
-            run_id = event.data['id']
+            run_id = event.data.id
             self.handle_requires_action(event.data, run_id)
 
     def handle_requires_action(self, data, run_id):
         tool_outputs = []
-
-        for tool in data['required_action']['submit_tool_outputs']['tool_calls']:
-            if tool['function']['name'] == "get_airport_name":
-                tool_outputs.append({"tool_call_id": tool['id'], "output": "JFK"})
+        for tool in data.required_action.submit_tool_outputs.tool_calls:
+            if tool.function.name == "get_airport_name":
+                tool_outputs.append({"tool_call_id": tool.id, "output": "JFK"})
 
         self.submit_tool_outputs(tool_outputs, run_id)
 
