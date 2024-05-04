@@ -16,7 +16,7 @@ def upload_file():
         return 'No selected audio file', 400
 
     # Save the uploaded audio file
-    # audio_file.save(audio_file.filename)
+    audio_file.save(audio_file.filename)
 
     return 'Audio file uploaded successfully'
 
