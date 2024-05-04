@@ -2,8 +2,8 @@
 import {FC, useRef, useState} from "react";
 
 const FLASK_BASE_URL = "http://localhost:5000";
-
 const AUDIO_FILE_NAME = "audio.webm";
+
 const AudioRecorder: FC = () => {
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef<MediaRecorder | null>(null); // Corrected type
