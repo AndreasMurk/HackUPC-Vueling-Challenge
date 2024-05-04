@@ -6,10 +6,15 @@ import tempfile
 
 from adapters.WhisperService import WhisperService
 from adapters.TextToSpeech import TextToSpeech
+from adapters.Assistant import Assistant
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')
-CORS(app)
+CORS(app, resource={
+    r"/*": {
+        "origins": "*"
+    }
+})
 
 
 @app.route('/upload', methods=['POST'])
@@ -27,6 +32,10 @@ def upload_file():
 
     whisper = WhisperService(OpenAI())
     transcribed_text = whisper.get_text_from_path(temp_file.name)
+
+    assistant = Assistant(OpenAI())
+    assistant.receive_message(transcribed_text)
+
     textToSpeech = TextToSpeech(OpenAI())
     audio_chunks = textToSpeech.get_speech_from_text(transcribed_text)
     return Response(audio_chunks, mimetype='audio/mpeg')
