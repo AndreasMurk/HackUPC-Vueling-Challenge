@@ -6,6 +6,7 @@ from openai import OpenAI
 from adapters.WhisperService import WhisperService
 
 app = Flask(__name__)
+app.config.from_pyfile('settings.py')
 CORS(app)
 
 
@@ -21,7 +22,7 @@ def upload_file():
 
     whisper = WhisperService(OpenAI())
 
-    return whisper.get_text_from_file(audio_file)
+    return whisper.get_text_from_file(audio_file.save())
 
 
 def write_file_info(file):
