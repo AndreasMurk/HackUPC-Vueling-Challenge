@@ -10,6 +10,7 @@ const AudioRecorder: FC = () => {
     const [recordingStatus, setRecordingStatus] = useState("inactive");
     const [stream, setStream] = useState<MediaStream | null>(null); // Corrected type
     const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+    const [receivedAudioChunks, setReceivedAudioChunks] = useState<Blob[]>([]);
     const [audio, setAudio] = useState<string | null>(null); // You can adjust the type as needed
     const [text, setText] = useState<string | null>(null); // You can adjust the type as needed
     const mimeType = "audio/webm";
@@ -77,16 +78,35 @@ const AudioRecorder: FC = () => {
                     body: formData
                 });
 
-                if (!response.ok) {
-                    throw new Error(`Failed to upload audio: ${response.status} - ${response.statusText}`);
+                if (!response.ok) throw new Error(`Failed to upload audio: ${response.status} - ${response.statusText}`);
+
+                if (response.body === null) throw new Error("Response body is null");
+
+                // Receive audio chunks directly from response body
+                const reader = response.body.getReader();
+                const chunks = [];
+                while (true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+                    chunks.push(value);
                 }
 
-                const text = await response.text();
-                setText(text);
+                const combinedChunks = new Uint8Array(
+                    chunks.reduce((acc, chunk) => acc + chunk.length, 0)
+                );
+
+                let offset = 0;
+                chunks.forEach(chunk => {
+                    combinedChunks.set(chunk, offset);
+                    offset += chunk.length;
+                });
+
+                const receivedBlob = new Blob([combinedChunks], {type: 'audio/webm'});
+
+                setReceivedAudioChunks([receivedBlob]);
             } catch (error: any) {
                 console.error('Error transcribing audio:', error.message);
             }
-
             setAudioChunks([]);
         };
     };
@@ -112,6 +132,12 @@ const AudioRecorder: FC = () => {
                         </button>
                     ) : null}
                     {text && <p>{text}</p>}
+                    {receivedAudioChunks.length > 0 && (
+                        <audio controls>
+                            <source src={URL.createObjectURL(receivedAudioChunks[0])} type="audio/mpeg"/>
+                            Your browser does not support the audio element.
+                        </audio>
+                    )}
                 </div>
             </main>
         </div>
