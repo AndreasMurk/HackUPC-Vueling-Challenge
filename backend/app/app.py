@@ -1,17 +1,33 @@
-from flask import Flask
-from app.endpoints.upload import upload_bp
+from flask import Flask, request
 
-# Initialize the Flask application
 app = Flask(__name__)
 
-# Configure Flask app settings if needed
-# app.config['DEBUG'] = True
 
-# Register blueprints
-app.register_blueprint(upload_bp)
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return 'No file part'
 
-# If you have other blueprints, you can register them here
+    file = request.files['file']
+
+    if file.filename == '':
+        return 'No selected file'
+
+    # Retrieve basic information about the file
+    file_info = {
+        'filename': file.filename,
+        'content_type': file.content_type,
+        'content_length': file.content_length
+    }
+
+    # Write basic information about the file to a text file
+    with open('file_info.txt', 'w') as f:
+        f.write(f"Filename: {file_info['filename']}\n")
+        f.write(f"Content Type: {file_info['content_type']}\n")
+        f.write(f"Content Length: {file_info['content_length']}\n")
+
+    return 'File information saved successfully'
+
 
 if __name__ == '__main__':
-    # Run the Flask app
     app.run(debug=True)
