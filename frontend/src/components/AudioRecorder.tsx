@@ -3,6 +3,7 @@ import {FC, useRef, useState} from "react";
 
 const FLASK_BASE_URL = "http://localhost:5000";
 
+const AUDIO_FILE_NAME = "audio.webm";
 const AudioRecorder: FC = () => {
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef<MediaRecorder | null>(null); // Corrected type
@@ -66,7 +67,7 @@ const AudioRecorder: FC = () => {
 
             // Create a FormData object and append the audio file
             const formData = new FormData();
-            formData.append('audio', audioBlob);
+            formData.append('audio', audioBlob, AUDIO_FILE_NAME);
 
             // Send the audio file to the backend
             try {
