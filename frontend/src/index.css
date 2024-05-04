@@ -1,28 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 .Button {
-  display: flex;
-  background-color: #FFCC00;
-  border-radius: 100%;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  
+    display: flex;
+    background-color: #FFCC00;
+    border-radius: 100%;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+
 }
 
-.Vueling-logo {
-  height: 40vmin;
-  pointer-events: none;
+@layer components {
+    .button-base {
+        @apply min-w-[80px] rounded border-primary px-2 py-1 text-sm font-bold transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-70 max-sm:min-w-[40px] max-sm:px-[0.5rem] max-sm:py-[0.3rem];
+    }
+
+    .button {
+        @apply button-base bg-primary text-white hover:bg-primary/90;
+    }
+
+    .button-black {
+        @apply button-base bg-black text-white hover:bg-black/95 hover:text-secondary;
+    }
 }

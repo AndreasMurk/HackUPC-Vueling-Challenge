@@ -1,5 +1,7 @@
 "use client";
 import {FC, useRef, useState} from "react";
+import {FaMicrophone} from "react-icons/fa";
+import {ReactComponent as Logo} from '../logo.svg';
 
 const FLASK_BASE_URL = "http://localhost:5000";
 const AUDIO_FILE_NAME = "audio.webm";
@@ -111,37 +113,45 @@ const AudioRecorder: FC = () => {
         };
     };
 
+
     return (
-        <div>
-            <h2>Audio Recorder</h2>
-            <main>
-                <div className="audio-controls">
-                    {!permission ? (
-                        <button onClick={getMicrophonePermission} type="button">
-                            Get Microphone
-                        </button>
-                    ) : null}
-                    {permission && recordingStatus === "inactive" ? (
-                        <button onClick={startRecording} type="button">
-                            Start Recording
-                        </button>
-                    ) : null}
-                    {recordingStatus === "recording" ? (
-                        <button onClick={stopRecording} type="button">
-                            Stop Recording
-                        </button>
-                    ) : null}
-                    {text && <p>{text}</p>}
-                    {receivedAudioChunks.length > 0 && (
-                        <audio autoPlay={true}>
-                            <source src={URL.createObjectURL(receivedAudioChunks[0])} type="audio/mpeg"/>
-                            Your browser does not support the audio element.
-                        </audio>
-                    )}
-                </div>
-            </main>
-        </div>
+        <>
+            <div className="bg-amber-400 flex flex-col items-center justify-center h-64">
+                <Logo className={"mt-4"}/>
+                <h2 className="text-4xl font-bold text-primary mb-8">Vueling Voice Assistant</h2>
+            </div>
+            <div>
+                <main className={"mt-16"}>
+                    <div className="audio-controls">
+                        {!permission ? (
+                            <button onClick={getMicrophonePermission} type="button"
+                                    className="button bg-amber-500 text-white px-4 py-2 rounded-full focus:outline-none">
+                                Get Microphone Permission
+                            </button>
+                        ) : null}
+                        {permission && recordingStatus === "inactive" ? (
+                            <button onClick={startRecording} type="button" className="focus:outline-none">
+                                <FaMicrophone className="text-7xl"/>
+                            </button>
+                        ) : null}
+                        {recordingStatus === "recording" ? (
+                            <button onClick={stopRecording} type="button" className="button bg-amber-500 text-white px-4 py-2 rounded-full focus:outline-none">
+                                Stop Recording
+                            </button>
+                        ) : null}
+                        {text && <p>{text}</p>}
+                        {receivedAudioChunks.length > 0 && (
+                            <audio autoPlay={true}>
+                                <source src={URL.createObjectURL(receivedAudioChunks[0])} type="audio/mpeg"/>
+                                Your browser does not support the audio element.
+                            </audio>
+                        )}
+                    </div>
+                </main>
+            </div>
+        </>
     );
+
 }
 
 export default AudioRecorder;

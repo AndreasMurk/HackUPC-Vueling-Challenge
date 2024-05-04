@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .button-base {
+        @apply min-w-[80px] rounded border-primary px-2 py-1 text-sm font-bold transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-70 max-sm:min-w-[40px] max-sm:px-[0.5rem] max-sm:py-[0.3rem];
+    }
+
+    .button {
+        @apply button-base bg-primary text-white hover:bg-primary/90;
+    }
+
+    .button-black {
+        @apply button-base bg-black text-white hover:bg-black/95 hover:text-secondary;
+    }
+
+    .button-secondary {
+        @apply button-base bg-secondary-400 text-white hover:bg-secondary-500;
+    }
+
+    .button-tertiary {
+        @apply button-base bg-tertiary-400 text-white hover:bg-tertiary-500;
+    }
+
+    .button-inverse {
+        @apply button-base bg-grey-300 text-black hover:bg-grey-400;
+    }
+
+    .button-light {
+        @apply button-base border-grey-400 bg-white hover:bg-grey-200;
+    }
+
+    .button-disabled {
+        @apply bg-grey-700 hover:bg-grey-700;
+    }
+
+    /* For Webkit-based browsers (Chrome, Safari and Opera) */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* For IE, Edge and Firefox */
+    .scrollbar-hide {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .max-w-container {
+        @apply max-w-screen-4xl px-16 max-lg:px-8 max-md:px-4 max-xs:px-2;
+    }
+}
+
+html:has(dialog[open]) {
+    overflow: hidden;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
