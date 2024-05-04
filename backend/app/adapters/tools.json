@@ -1,0 +1,19 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_airport_name",
+      "description": "Get the name of the airport closest to the given location",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "The city and state, e.g., San Francisco, CA"
+          }
+        },
+        "required": ["location"]
+      }
+    }
+  }
+]

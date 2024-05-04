@@ -1,30 +1,22 @@
 from typing_extensions import override
 from openai import AssistantEventHandler
+import os
+import json
+
+# Get the absolute path to the directory of the current script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+tools_file_path = os.path.join(current_dir, 'tools.json')
 
 
 class Assistant:
     def __init__(self, client):
         self.client = client
+        with open(tools_file_path) as f:
+            tools = json.load(f)
         self.assistant = client.beta.assistants.create(
             name="Airport Assistant",
             instructions="You are an airport assistant for visually impaired people. Answer questions about the airport process",
-            tools=[{
-                "type": "function",
-                "function": {
-                    "name": "get_airport_name",
-                    "description": "Get the name of the airport closest to the given location",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "location": {
-                                "type": "string",
-                                "description": "The city and state, e.g., San Francisco, CA"
-                            }
-                        },
-                        "required": ["location"]
-                    }
-                }
-            }],
+            tools=tools,
             model="gpt-4-turbo"
         )
         self.thread = self.client.beta.threads.create()
@@ -38,9 +30,9 @@ class Assistant:
         )
 
         with self.client.beta.threads.runs.stream(
-            thread_id=self.thread.id,
-            assistant_id=self.assistant.id,
-            event_handler=self.event_handler
+                thread_id=self.thread.id,
+                assistant_id=self.assistant.id,
+                event_handler=self.event_handler
         ) as stream:
             stream.until_done()
 
