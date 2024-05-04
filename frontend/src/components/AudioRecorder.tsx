@@ -125,17 +125,22 @@ const AudioRecorder: FC = () => {
                     <div className="audio-controls">
                         {!permission ? (
                             <button onClick={getMicrophonePermission} type="button"
-                                    className="button bg-amber-500 text-white px-4 py-2 rounded-full focus:outline-none">
+                                    className="button bg-amber-500 text-white px-4 py-2 rounded-full focus:outline-none"
+                                    aria-label={"Microphone Permission Button"}>
                                 Get Microphone Permission
                             </button>
                         ) : null}
                         {permission && recordingStatus === "inactive" ? (
-                            <button onClick={startRecording} type="button" className="focus:outline-none">
-                                <FaMicrophone className="text-7xl"/>
+                            <button onClick={startRecording} type="button" className="focus:outline-none"
+                                    aria-label={"Start Recording Button"}>
+                                <FaMicrophone className="text-7xl" aria-hidden="true"/>
+                                <span className="sr-only">{"Start Recording Button"}</span>
                             </button>
                         ) : null}
                         {recordingStatus === "recording" ? (
-                            <button onClick={stopRecording} type="button" className="button bg-amber-500 text-white px-4 py-2 rounded-full focus:outline-none">
+                            <button onClick={stopRecording} type="button"
+                                    className="button bg-amber-500 text-white px-4 py-2 rounded-full focus:outline-none"
+                                    aria-label={"Stop Recording Button"}>
                                 Stop Recording
                             </button>
                         ) : null}
