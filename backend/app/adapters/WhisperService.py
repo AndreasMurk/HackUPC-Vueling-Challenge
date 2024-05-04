@@ -1,14 +1,18 @@
 from openai import OpenAI
 
+
 class WhisperService:
     def __init__(self, client=OpenAI):
         self.client = client()
 
-    def get_text(path):
+    def get_text_from_path(self, path: str):
         audio_file = open(path, "rb")
+        return self.get_text_from_file(audio_file)
+
+    def get_text_from_file(self, file):
         transcription = self.client.audio.transcriptions.create(
             model="whisper-1",
-            file=audio_file
+            file=file
         )
 
         return transcription
