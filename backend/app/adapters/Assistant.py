@@ -15,7 +15,7 @@ class Assistant:
             tools = json.load(f)
         self.assistant = client.beta.assistants.create(
             name="Airport Assistant",
-            instructions="You are an airport assistant for visually impaired people. Answer questions about the airport process",
+            instructions="You are an airport assistant for visually impaired people. Answer questions about the airport process. The airport process consist of the following: Check-In, Baggage Information, Security Instructions, and Boarding information.",
             tools=tools,
             model="gpt-4-turbo"
         )
