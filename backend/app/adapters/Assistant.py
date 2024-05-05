@@ -3,6 +3,8 @@ from openai import AssistantEventHandler
 import os
 import json
 
+from Flight.Flight import Flight
+
 # Get the absolute path to the directory of the current script
 current_dir = os.path.dirname(os.path.abspath(__file__))
 tools_file_path = os.path.join(current_dir, 'tools.json')
@@ -59,9 +61,13 @@ class EventHandler(AssistantEventHandler):
 
     def handle_requires_action(self, data, run_id):
         tool_outputs = []
+        flight_info = Flight("FR2917")
+        flight_info.get_flight_info()
         for tool in data.required_action.submit_tool_outputs.tool_calls:
             if tool.function.name == "get_airport_name":
                 tool_outputs.append({"tool_call_id": tool.id, "output": "JFK"})
+            elif tool.function.name == "get_gate_info":
+                tool_outputs.append({"tool_call_id": tool.id, "output": flight_info.get_gate})
 
         self.submit_tool_outputs(tool_outputs, run_id)
 

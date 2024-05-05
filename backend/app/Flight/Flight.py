@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 
 
 class Flight:
@@ -10,8 +11,9 @@ class Flight:
         self.gate = gate
         self.scheduled = scheduled
         self.estimated = estimated
-        self.flight_api_url = "https://api.aviationstack.com/v1/flights"
-        self.flight_api_key = os.env.get('FLIGHT_API_KEY')
+        self.flight_api_url = "http://api.aviationstack.com/v1/flights"
+        #self.flight_api_key = os.env.get('FLIGHT_API_KEY')
+        self.flight_api_key = os.environ.get('FLIGHT_API_KEY')
 
     def get_flight_info(self):
         params = {
@@ -20,14 +22,18 @@ class Flight:
         }
         response = requests.get(self.flight_api_url, params=params)
         data = response.json()
-        if data['pagination']['total'] == 0:
-            return None
-        else:
-            self.departure = data['departure']['airport']
-            self.arrival = data['arrival']['airport']
-            self.gate = data['departure']['gate']
-            self.scheduled = data['departure']['scheduled']
-            self.estimated = data['departure']['estimated']
+        data = data['data']
+        # if data['pagination']['total'] == 0:
+        #     return None
+        # else:
+        if data is None:
+            print("no information available")
+        print(data)
+        self.departure = data['departure']['airport']
+        self.arrival = data['arrival']['airport']
+        self.gate = data['departure']['gate']
+        self.scheduled = data['departure']['scheduled']
+        self.estimated = data['departure']['estimated']
 
     def get_gate(self):
         params = {
