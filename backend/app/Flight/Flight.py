@@ -44,3 +44,16 @@ class Flight:
 
     def get_departure(self):
         return self.departure
+    
+    def get_arrival(self):
+        return self.arrival
+    
+    def get_scheduled(self):
+        return self.scheduled
+    
+    def get_estimated(self):
+        return self.estimated
+    
+    def get_flight_number(self):
+        return self.flight_number
+    
