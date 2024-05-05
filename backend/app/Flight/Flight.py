@@ -29,24 +29,14 @@ class Flight:
         if data is None:
             print("no information available")
         print(data)
-        self.departure = data['departure']['airport']
-        self.arrival = data['arrival']['airport']
-        self.gate = data['departure']['gate']
-        self.scheduled = data['departure']['scheduled']
-        self.estimated = data['departure']['estimated']
+        self.departure = data[0]['departure']['airport']
+        self.arrival = data[0]['arrival']['airport']
+        self.gate = data[0]['departure']['gate']
+        self.scheduled = data[0]['departure']['scheduled']
+        self.estimated = data[0]['departure']['estimated']
 
     def get_gate(self):
-        params = {
-            "access_key": self.flight_api_key,
-            "flight_iata": self.flight_number
-        }
-        response = requests.get(self.flight_api_url, params=params)
-        data = response.json()
-        if data['pagination']['total'] == 0:
-            return None
-        else:
-            self.gate = data['departure']['gate']
-            return self.gate
+        return self.gate
 
     def get_departure(self):
         return self.departure
