@@ -48,12 +48,9 @@ class EventHandler(AssistantEventHandler):
 
     @override
     def on_event(self, event):
-        print(f"Event received: {event}")  # Debug print to observe events
         if event.event == 'thread.message.completed':
-            print(f"Message event: {event.data.content[0].text.value}")  # Debug print for message contents
             self.responses.append(event.data.content[0].text.value)
         elif event.event == 'thread.run.requires_action':
-            print(f"Requires action: {event.data}")  # Debug print for actions needed
             run_id = event.data.id
             self.handle_requires_action(event.data, run_id)
 
