@@ -28,7 +28,7 @@ class Flight:
         # else:
         if data is None:
             print("no information available")
-        print(data)
+        print(data[0])
         self.departure = data[0]['departure']['airport']
         self.arrival = data[0]['arrival']['airport']
         self.gate = data[0]['departure']['gate']

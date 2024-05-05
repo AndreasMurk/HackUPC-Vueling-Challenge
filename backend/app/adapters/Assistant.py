@@ -61,14 +61,13 @@ class EventHandler(AssistantEventHandler):
 
     def handle_requires_action(self, data, run_id):
         tool_outputs = []
-        flight_info = Flight("FR2917")
+        flight_info = Flight("FR1342")
         flight_info.get_flight_info()
         for tool in data.required_action.submit_tool_outputs.tool_calls:
             if tool.function.name == "get_airport_name":
                 tool_outputs.append({"tool_call_id": tool.id, "output": flight_info.get_departure()})
             elif tool.function.name == "get_gate_info":
                 tool_outputs.append({"tool_call_id": tool.id, "output": flight_info.get_gate()})
-
         self.submit_tool_outputs(tool_outputs, run_id)
 
     def submit_tool_outputs(self, tool_outputs, run_id):
